@@ -1,10 +1,20 @@
 const express = require('express');
 const app = express();
 
-app.get('/', (req, res) => {
-  return res.json({
-    message: 'Hello World Ignite!'
-  });
+app.get('/courses', (req, res) => {
+  return res.json(['Curso 1', 'Curso 2']);
+});
+
+app.post('/courses', (req, res) => {
+  return res.json(['Curso 1', 'Curso 2']);
+});
+
+app.put('/courses/:id', (req, res) => {
+  return res.json(['Curso 6', 'Curso 2']);
+});
+
+app.patch('/courses/:id', (req, res) => {
+  return res.json(['Curso 61', 'Curso 2']);
 });
 
 app.listen(3333);
