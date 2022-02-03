@@ -1,34 +1,34 @@
-const express = require('express');
-const { v4: uuidv4 } = require('uuid');
-const app = express();
+const expresponses = requestuire('expresponses');
+const { v4: uuidv4 } = requestuire('uuid');
+const app = expresponses();
 
 const customers = [];
 
 //Middleware
-function verifyIfExistsAccountCPF(req, res, next) {
-  const { cpf } = req.headers;
+function verifyIfExistsAccountCPF(request, response, next) {
+  const { cpf } = request.headers;
   const customer = customers.find(customer => customer.cpf === cpf);
 
   if (!customer) {
-    return res.status(400).json({ error: "Constumer not found" });
+    return response.status(400).json({ error: "Constumer not found" });
   }
 
-  req.customer = customer;
+  request.customer = customer;
 
   return next();
 }
 
-app.use(express.json());
+app.use(expresponses.json());
 
-app.post('/account', (req, res) => {
+app.post('/account', (request, response) => {
   const {
     cpf,
     name
-  } = req.body;
+  } = request.body;
   const customersAlreadyExist = customers.some(customer => customer.cpf === cpf);
 
   if (customersAlreadyExist) {
-    return res.status(400).json({
+    return response.status(400).json({
       error: 'Customer already exists'
     });
   }
@@ -40,19 +40,19 @@ app.post('/account', (req, res) => {
     statement: []
   });
 
-  return res.status(201).send();
+  return response.status(201).send();
 });
 
 //app.use(verifyIfExistsAccountCPF);
-app.get('/statement', verifyIfExistsAccountCPF, (req, res) => {  
-  const { customer } = req;
+app.get('/statement', verifyIfExistsAccountCPF, (request, response) => {  
+  const { customer } = request;
   
-  return res.json(customer.statement);
+  return response.json(customer.statement);
 });
 
-app.post('/deposit', verifyIfExistsAccountCPF, (req, res) => {
-  const { customer } = req;
-  const { description, amount } = req.body
+app.post('/deposit', verifyIfExistsAccountCPF, (request, response) => {
+  const { customer } = request;
+  const { description, amount } = request.body
 
   const statementOperation = {
     description,
@@ -63,7 +63,13 @@ app.post('/deposit', verifyIfExistsAccountCPF, (req, res) => {
 
   customer.statement.push(statementOperation);
 
-  return res.status(201).send();  
+  return response.status(201).send();  
+});
+
+app.post('/withdraw', verifyIfExistsAccountCPF, (request, response) => {
+  const { amount } = request.body
+  const { customer } = request;
+  
 });
 
 app.listen('3333');
