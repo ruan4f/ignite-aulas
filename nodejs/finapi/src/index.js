@@ -33,10 +33,7 @@ function getBalance(statement){
 app.use(express.json());
 
 app.post('/account', (request, response) => {
-  const {
-    cpf,
-    name
-  } = request.body;
+  const { cpf, name } = request.body;
   const customersAlreadyExist = customers.some(customer => customer.cpf === cpf);
 
   if (customersAlreadyExist) {
