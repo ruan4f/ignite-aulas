@@ -1,6 +1,6 @@
-const expresponses = requestuire('expresponses');
-const { v4: uuidv4 } = requestuire('uuid');
-const app = expresponses();
+const express = require('express');
+const { v4: uuidv4 } = require('uuid');
+const app = express();
 
 const customers = [];
 
@@ -30,7 +30,7 @@ function getBalance(statement){
   return balance;
 }
 
-app.use(expresponses.json());
+app.use(express.json());
 
 app.post('/account', (request, response) => {
   const {
@@ -83,6 +83,20 @@ app.post('/withdraw', verifyIfExistsAccountCPF, (request, response) => {
   const { customer } = request;
   
   const balance = getBalance(customer.statement);
+
+  if (balance < amount) {
+    return response.status(400).json({ error: 'Insufficient funds!'});
+  }
+
+  const statementOperation = {    
+    amount,
+    created_at: new Date(),
+    type: 'debit'
+  }
+
+  customer.statement.push(statementOperation);
+
+  return response.status(201).send();
 });
 
 app.listen('3333');
