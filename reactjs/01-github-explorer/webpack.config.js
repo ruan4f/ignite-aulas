@@ -14,7 +14,7 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx'],
   },
-  devServer:{
+  devServer: {
     static: {
       directory: path.resolve(__dirname, 'public')
     }
@@ -25,10 +25,17 @@ module.exports = {
     })
   ],
   module: {
-    rules: [{
-      test: /\.jsx$/,
-      exclude: /node_modules/,
-      use: 'babel-loader',
-    }]
+    rules: [
+      {
+        test: /\.jsx$/,
+        exclude: /node_modules/,
+        use: 'babel-loader',
+      },
+      {
+        test: /\.scss$/,
+        exclude: /node_modules/,
+        use: ['style-loader', 'css-loader', 'sass-loader'],
+      },
+    ]
   }
 }
