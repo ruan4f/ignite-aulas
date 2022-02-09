@@ -1,16 +1,22 @@
-const express = require('express');
-const { v4: uuidv4 } = require('uuid');
+const express = require("express");
+const {
+  v4: uuidv4
+} = require("uuid");
 const app = express();
 
 const customers = [];
 
 //Middleware
 function verifyIfExistsAccountCPF(request, response, next) {
-  const { cpf } = request.headers;
-  const customer = customers.find(customer => customer.cpf === cpf);
+  const {
+    cpf
+  } = request.headers;
+  const customer = customers.find((customer) => customer.cpf === cpf);
 
   if (!customer) {
-    return response.status(400).json({ error: "Constumer not found" });
+    return response.status(400).json({
+      error: "Constumer not found"
+    });
   }
 
   request.customer = customer;
@@ -18,9 +24,9 @@ function verifyIfExistsAccountCPF(request, response, next) {
   return next();
 }
 
-function getBalance(statement){
+function getBalance(statement) {
   const balance = statement.reduce((acc, operation) => {
-    if(operation.type === 'credit'){
+    if (operation.type === "credit") {
       return acc + operation.amount;
     } else {
       return acc - operation.amount;
@@ -32,13 +38,18 @@ function getBalance(statement){
 
 app.use(express.json());
 
-app.post('/account', (request, response) => {
-  const { cpf, name } = request.body;
-  const customersAlreadyExist = customers.some(customer => customer.cpf === cpf);
+app.post("/account", (request, response) => {
+  const {
+    cpf,
+    name
+  } = request.body;
+  const customersAlreadyExist = customers.some(
+    (customer) => customer.cpf === cpf
+  );
 
   if (customersAlreadyExist) {
     return response.status(400).json({
-      error: 'Customer already exists'
+      error: "Customer already exists",
     });
   }
 
@@ -46,54 +57,83 @@ app.post('/account', (request, response) => {
     cpf,
     name,
     id: uuidv4(),
-    statement: []
+    statement: [],
   });
 
   return response.status(201).send();
 });
 
 //app.use(verifyIfExistsAccountCPF);
-app.get('/statement', verifyIfExistsAccountCPF, (request, response) => {  
-  const { customer } = request;
-  
+app.get("/statement", verifyIfExistsAccountCPF, (request, response) => {
+  const {
+    customer
+  } = request;
+
   return response.json(customer.statement);
 });
 
-app.post('/deposit', verifyIfExistsAccountCPF, (request, response) => {
-  const { customer } = request;
-  const { description, amount } = request.body
+app.post("/deposit", verifyIfExistsAccountCPF, (request, response) => {
+  const {
+    customer
+  } = request;
+  const {
+    description,
+    amount
+  } = request.body;
 
   const statementOperation = {
     description,
     amount,
     created_at: new Date(),
-    type: 'credit'
-  }
+    type: "credit",
+  };
 
   customer.statement.push(statementOperation);
 
   return response.status(201).send();
 });
 
-app.post('/withdraw', verifyIfExistsAccountCPF, (request, response) => {
-  const { amount } = request.body;
-  const { customer } = request;
-  
+app.post("/withdraw", verifyIfExistsAccountCPF, (request, response) => {
+  const {
+    amount
+  } = request.body;
+  const {
+    customer
+  } = request;
+
   const balance = getBalance(customer.statement);
 
   if (balance < amount) {
-    return response.status(400).json({ error: 'Insufficient funds!'});
+    return response.status(400).json({
+      error: "Insufficient funds!"
+    });
   }
 
-  const statementOperation = {    
+  const statementOperation = {
     amount,
     created_at: new Date(),
-    type: 'debit'
-  }
+    type: "debit",
+  };
 
   customer.statement.push(statementOperation);
 
   return response.status(201).send();
 });
 
-app.listen('3333');
+app.get("/statement/date", verifyIfExistsAccountCPF, (request, response) => {
+  const {
+    customer
+  } = request;
+  const {
+    date
+  } = request.query;
+
+  const dateFormat = new Date(date + '00:00');
+  const statement = customer.statement.filter((statement) =>
+    statement.created_at.toDateString() === new Date(dateFormat).toDateString()
+  );
+
+  return response.json(statement);
+});
+
+app.listen("3333");
