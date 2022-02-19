@@ -8,9 +8,6 @@ import { Container } from './styles';
 
 export function Summary() {
   const { transactions } = useContext(TransactionsContext);
-
-  console.log(transactions);
-
   const summary = transactions.reduce(
     (acc, transaction) => {
       if (transaction.type === 'deposit') {
