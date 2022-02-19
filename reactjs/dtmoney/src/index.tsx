@@ -10,16 +10,16 @@ createServer({
     this.get('/transactions', () => {
       return [
         {
-          id: 1, 
+          id: 1,
           title: 'Transaction 1',
           amount: 400,
           type: 'deposit',
           category: 'Food',
-          createdAt: new Date()
-        }
-      ]
+          createdAt: new Date(),
+        },
+      ];
     });
-  }
+  },
 });
 
 ReactDOM.render(
@@ -28,4 +28,3 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
-

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Container = styled.header`
   background: var(--blue);
@@ -13,9 +13,9 @@ export const Content = styled.div`
   align-items: center;
   justify-content: space-between;
 
-  button { 
+  button {
     font-size: 1rem;
-    color: #FFF;
+    color: #fff;
     background: var(--blue-light);
     border: 0;
     padding: 0 2rem;

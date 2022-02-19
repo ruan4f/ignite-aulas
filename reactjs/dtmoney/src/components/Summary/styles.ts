@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Container = styled.div`
   display: grid;
@@ -6,13 +6,13 @@ export const Container = styled.div`
   gap: 2rem;
   margin-top: -10rem;
 
-  div { 
+  div {
     background: var(--shape);
     padding: 1.5rem 2rem;
     border-radius: 0.25rem;
     color: var(--text-title);
 
-    header { 
+    header {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -28,7 +28,7 @@ export const Container = styled.div`
 
     &.highlight-background {
       background: var(--green);
-      color: #FFF;
+      color: #fff;
     }
   }
 `;
