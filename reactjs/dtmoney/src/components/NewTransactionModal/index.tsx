@@ -32,22 +32,12 @@ export function NewTransactionModal({ isOpen, onRequestClose }: NewTransactionMo
         <input type="number" placeholder="Valor" />
 
         <TransactionTypeContainer>
-          <RadioBox
-            type="button"
-            onClick={() => {
-              setType("deposit");
-            }}
-          >
+          <RadioBox type="button" onClick={() => setType("deposit")}>
             <img src={incomeImg} alt="Entrada" />
             <span>Entrada</span>
           </RadioBox>
 
-          <RadioBox
-            type="button"
-            onClick={() => {
-              setType("withdraw");
-            }}
-          >
+          <RadioBox type="button" onClick={() => setType("withdraw")}>
             <img src={outcomeImg} alt="Saída" />
             <span>Saída</span>
           </RadioBox>
