@@ -4,9 +4,16 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Inicio | ig.news</title>
+        <title>Home | ig.news</title>
       </Head>
-      <h1>Hello World</h1>
+      
+      <main>
+        <section>
+          <span>Hey, Welcome</span>
+        </section>
+
+        <img src="images/avatar.svg" alt="Girl coding" />
+      </main>
     </>
   );
 }
