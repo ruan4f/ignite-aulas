@@ -36,9 +36,14 @@ export const getServerSideProps: GetServerSideProps = async () => {
     expand: ['product']
   });
 
+  const product = {
+    priceId: price.id,
+    amount: price.unit_amount / 100,
+  }
+
   return {
     props: {
-      nome: 'Ruan',
+      product
     },
   };
 };
