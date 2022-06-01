@@ -4,7 +4,6 @@ import Stripe from 'stripe';
 import { stripe } from '../../services/stripe';
 import { saveSubscription } from './_lib/manageSubscription';
 
-
 async function buffer(readable: Readable) {
   const chunks = [];
 
@@ -21,7 +20,12 @@ export const config = {
   },
 };
 
-const relevantEvents = new Set(['checkout.session.completed']);
+const relevantEvents = new Set([
+  'checkout.session.completed',
+  'customer.subscription.created',
+  'customer.subscription.updated',
+  'customer.subscription.deleted',
+]);
 
 const webhooks = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
@@ -45,12 +49,26 @@ const webhooks = async (req: NextApiRequest, res: NextApiResponse) => {
     if (relevantEvents.has(type)) {
       try {
         switch (type) {
+          case 'customer.subscription.created':
+          case 'customer.subscription.updated':
+          case 'customer.subscription.deleted':
+            const subscription = event.data.object as Stripe.Subscription;
+
+            await saveSubscription(
+              subscription.id,
+              subscription.customer.toString(),
+              type === 'customer.subscription.created'
+            );
+
+            break;
           case 'checkout.session.completed':
-            const checkoutSession = event.data.object as Stripe.Checkout.Session;
+            const checkoutSession = event.data
+              .object as Stripe.Checkout.Session;
 
             await saveSubscription(
               checkoutSession.subscription.toString(),
-              checkoutSession.customer.toString()
+              checkoutSession.customer.toString(),
+              true
             );
 
             break;
