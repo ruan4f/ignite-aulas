@@ -1,21 +1,18 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { SubscribeButton } from '.';
 
-jest.mock('next-auth/react', () => {
-  return {
-    useSession() {
-      return [null, false];
-    },
-    signIn: jest.fn(),
-  }
-});
-
+jest.mock('next-auth/react');
 jest.mock('next/router');
 
 describe('SubscribeButton component', () => {
   it('renders correctly', () => {
+    const useSessionMocked = (useSession as jest.Mock);
+    useSessionMocked.mockReturnValueOnce({
+      data: {},
+      status: "unauthenticated",
+    });
 
     render(<SubscribeButton />);
 
@@ -24,30 +21,49 @@ describe('SubscribeButton component', () => {
 
   it('redirects user to sign in when not authenticated', () => {
     const signInMocked = (signIn as jest.Mock);
+    const useSessionMocked = (useSession as jest.Mock);
+
+    useSessionMocked.mockReturnValueOnce({
+      status: "unauthenticated",
+    });
 
     render(<SubscribeButton />);
 
-    const subscriptionButton = screen.getByText('Subscribe Now');
+    const subscribeButton = screen.getByText('Subscribe Now');
 
-    fireEvent.click(subscriptionButton);
+    fireEvent.click(subscribeButton);
 
     expect(signInMocked).toHaveBeenCalled();
   });
 
   it('redirects to posts when user already has a subscription', () => {
     const useRouterMocked = (useRouter as jest.Mock);
+    const useSessionMocked = (useSession as jest.Mock);
+    const pushMocked = jest.fn().mockImplementation(() => ({ route: '/posts' }));;
+    
+    useSessionMocked.mockReturnValueOnce({
+      data: {
+        user: {
+          name: "John Doe",
+          email: "john.doe@gmail.com"
+        },
+        activeSubscription: 'yes',
+        expires: '10000'
+      },
+      status: "authenticated",
+    });
 
     useRouterMocked.mockReturnValueOnce({
-      push: jest.fn()
+      push: pushMocked
     });
 
     render(<SubscribeButton />);
 
-    const subscriptionButton = screen.getByText('Subscribe Now');
+    const subscribeButton = screen.getByText('Subscribe Now');
 
-    fireEvent.click(subscriptionButton);
+    fireEvent.click(subscribeButton);
 
-    expect(useRouterMocked).toHaveBeenCalled();
+    expect(pushMocked).toHaveBeenLastCalledWith('/posts');
   })
 
 });
