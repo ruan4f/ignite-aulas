@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/router';
 import { SubscribeButton } from '.';
 
 jest.mock('next-auth/react', () => {
@@ -11,15 +12,7 @@ jest.mock('next-auth/react', () => {
   }
 });
 
-jest.mock('next/router', () => {
-  return {
-    useRouter() {
-      return {
-        asPath: '/'
-      }
-    }
-  }
-});
+jest.mock('next/router');
 
 describe('SubscribeButton component', () => {
   it('renders correctly', () => {
@@ -40,5 +33,21 @@ describe('SubscribeButton component', () => {
 
     expect(signInMocked).toHaveBeenCalled();
   });
+
+  it('redirects to posts when user already has a subscription', () => {
+    const useRouterMocked = (useRouter as jest.Mock);
+
+    useRouterMocked.mockReturnValueOnce({
+      push: jest.fn()
+    });
+
+    render(<SubscribeButton />);
+
+    const subscriptionButton = screen.getByText('Subscribe Now');
+
+    fireEvent.click(subscriptionButton);
+
+    expect(useRouterMocked).toHaveBeenCalled();
+  })
 
 });
