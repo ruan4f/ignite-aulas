@@ -4,7 +4,12 @@ import './global.css';
 
 function App() {
   return (
-    <Header />
+    <div>
+      <Header />
+
+      <div className="">
+      </div>
+    </div>
   )
 }
 
