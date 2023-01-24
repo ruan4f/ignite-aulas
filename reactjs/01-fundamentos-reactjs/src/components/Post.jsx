@@ -1,7 +1,8 @@
+
 export function Post(){
   return (
-    <div>
-      teste
-    </div>
+    <h1>
+      Hello World
+    </h1>
   )
 }
