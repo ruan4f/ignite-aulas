@@ -14,6 +14,7 @@ function App() {
         <Sidebar />
         <main>
           <Post />
+          <Post />
         </main>
       </div>
     </div>
