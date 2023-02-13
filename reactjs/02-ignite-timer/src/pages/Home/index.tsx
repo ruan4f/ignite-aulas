@@ -9,10 +9,13 @@ import {
   StartCountdownButton,
   TaskInput,
 } from './styles'
+import { useState } from 'react'
 
 // controlled / uncontrolled
 
 export function Home() {
+  const [task, setTask] = useState('')
+
   function handleSubmit(event) {}
 
   return (
