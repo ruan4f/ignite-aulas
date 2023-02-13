@@ -10,7 +10,6 @@ import {
   StartCountdownButton,
   TaskInput,
 } from './styles'
-import { useState } from 'react'
 
 // controlled / uncontrolled
 
@@ -20,6 +19,9 @@ export function Home() {
   function handleCreateNewCycle(data: any) {
     console.log(data)
   }
+
+  const task = watch('task')
+  const isSubmitDisable = !task
 
   return (
     <HomeContainer>
@@ -33,13 +35,12 @@ export function Home() {
             {...register('task')}
           />
 
-          <datalist
-            id="task-suggestions"
-            step={5}
-            min={5}
-            max={60}
-            {...register('minutesAmount', { valueAsNumber: true })}
-          />
+          <datalist id="task-suggestions">
+            <option value="Projeto 1" />
+            <option value="Projeto 2" />
+            <option value="Projeto 3" />
+            <option value="Banana" />
+          </datalist>
 
           <label htmlFor="minutesAmount">durante</label>
           <MinutesAmountInput
@@ -49,6 +50,7 @@ export function Home() {
             step={5}
             min={5}
             max={60}
+            {...register('minutesAmount', { valueAsNumber: true })}
           />
 
           <span>minutos.</span>
