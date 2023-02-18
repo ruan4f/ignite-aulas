@@ -71,8 +71,6 @@ export function Home() {
   const minutes = String(minutesAmount).padStart(2, '0')
   const seconds = String(secondsAmount).padStart(2, '0')
 
-  console.log(activeCycle)
-
   const task = watch('task')
   const isSubmitDisable = !task
 
