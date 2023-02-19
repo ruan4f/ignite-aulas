@@ -2,8 +2,7 @@ import { Play } from 'phosphor-react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as zod from 'zod'
-import { useState, useEffect, useState } from 'react'
-
+import { useState, useEffect } from 'react'
 import { differenceInSeconds } from 'date-fns'
 
 import {
