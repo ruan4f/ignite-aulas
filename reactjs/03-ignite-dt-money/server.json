@@ -47,6 +47,14 @@
       "type": "outcome",
       "createdAt": "2022-07-30T13:38:57.560Z",
       "id": 6
+    },
+    {
+      "description": "Mangá",
+      "price": 32,
+      "category": "Educação",
+      "type": "outcome",
+      "createdAt": "2023-03-05T15:00:43.025Z",
+      "id": 7
     }
   ]
 }
