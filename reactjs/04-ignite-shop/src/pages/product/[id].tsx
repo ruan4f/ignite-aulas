@@ -42,7 +42,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
         params: { id: 'prod_NWP6sATfDuYz3I' }
       }
     ],
-    fallback: false,
+    fallback: 'blocking',
   }
 }
 
